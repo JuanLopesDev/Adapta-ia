@@ -1,0 +1,54 @@
+@{ var docente = (ContaDocenteDto)ViewData["Docente"]!; }
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] · Adapta</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/portal.css" asp-append-version="true" />
+</head>
+<body class="portal">
+<a class="visually-hidden-focusable salto" href="#conteudo">Ir ao conteúdo</a>
+<div class="estrutura">
+    <aside id="menu-docente" class="barra offcanvas-lg offcanvas-start" tabindex="-1" aria-label="Menu do professor">
+        <div class="marca-area">
+            <a class="marca" asp-controller="Painel" asp-action="Index" aria-label="Adapta, painel do professor"><span aria-hidden="true">a</span><b>Adapta</b></a>
+            <button class="botao-icone d-lg-none ms-auto" data-bs-dismiss="offcanvas" data-bs-target="#menu-docente" aria-label="Fechar menu"><icone nome="X" /></button>
+        </div>
+        <partial name="_Navegacao" />
+    </aside>
+    <div class="workspace">
+        <header class="topo">
+            <div class="trilha">
+                <button class="botao-icone d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#menu-docente" aria-controls="menu-docente" aria-label="Abrir menu"><icone nome="Menu" /></button>
+                <button class="botao-icone d-none d-lg-inline-flex" id="recolher" aria-expanded="true" aria-controls="menu-docente" aria-label="Recolher menu"><icone nome="PanelLeftClose" /></button>
+                <span class="trilha-raiz">Espaço docente</span><i class="trilha-raiz"><icone nome="ChevronRight" /></i><strong>@ViewData["Title"]</strong>
+            </div>
+            <div class="dropdown">
+                <button class="perfil-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu de perfil de @docente.Nome">
+                    <span class="avatar" aria-hidden="true"><icone nome="GraduationCap" /></span>
+                    <span class="nome-topo">@docente.Nome</span><icone nome="ChevronDown" />
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" asp-controller="Conta" asp-action="Index">Meu perfil</a></li>
+                    <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmar-saida">Sair da conta</button></li>
+                </ul>
+            </div>
+        </header>
+        <main id="conteudo" class="conteudo" tabindex="-1">@RenderBody()</main>
+    </div>
+</div>
+<div class="modal fade" id="confirmar-saida" tabindex="-1" aria-labelledby="titulo-saida" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content p-4">
+        <h2 id="titulo-saida">Sair da conta?</h2><p>Você precisará entrar novamente para acessar o espaço docente.</p>
+        <form asp-controller="Conta" asp-action="Sair" method="post" class="d-flex gap-2 justify-content-end">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+            <button class="btn btn-primary" type="submit">Sair</button>
+        </form>
+    </div></div>
+</div>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+<script src="~/js/portal.js" type="module" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body></html>

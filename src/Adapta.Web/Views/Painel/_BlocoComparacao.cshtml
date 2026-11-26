@@ -1,0 +1,4 @@
+@using Adapta.Web.DTOs.Documentos
+@model BlocoOriginal
+@if (Model.Tipo == "Texto") { <p class="texto-folha">@Model.Texto</p> }
+else { <partial name="_ElementoFolha" model="Model" /> }

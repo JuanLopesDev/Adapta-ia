@@ -1,0 +1,11 @@
+@model IReadOnlyList<ContaDocenteDto>
+@{ ViewData["Title"] = "Usuários"; }
+<div class="titulo-pagina"><div><h1>Usuários</h1><p>Gerencie as contas que podem acessar o espaço docente.</p></div>
+<a class="btn btn-primary" asp-action="Criar">Criar usuário</a></div>
+@if (TempData["Mensagem"] is string mensagem) { <p class="alert alert-success" role="status">@mensagem</p> }
+<section class="cartao ficha"><h2>Contas cadastradas</h2>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Nome</th><th scope="col">Matrícula</th><th scope="col">Ação</th></tr></thead><tbody>
+@foreach (var p in Model) {
+    <tr><td>@p.Nome</td><td>@p.Matricula</td><td><a asp-action="EditarNome" asp-route-matricula="@p.Matricula" aria-label="Editar nome de @p.Nome">Editar nome</a></td></tr>
+}
+</tbody></table></div></section>

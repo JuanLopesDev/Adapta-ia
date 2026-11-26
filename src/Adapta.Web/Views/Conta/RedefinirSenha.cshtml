@@ -1,0 +1,16 @@
+@model Adapta.Web.ViewModels.RedefinirSenhaViewModel
+@{ ViewData["Title"] = "Redefinir senha"; }
+<section class="conta-pagina">
+    <form asp-action="RedefinirSenha" method="post" class="form-conta">
+        <h1>Redefinir senha</h1>
+        <p>@Adapta.Web.ViewModels.NovaSenhaViewModel.Requisitos</p>
+        <input type="hidden" asp-for="Id" /><input type="hidden" asp-for="Token" />
+        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+        <label asp-for="Nova"></label>
+        <input asp-for="Nova" class="form-control" autocomplete="new-password" />
+        <label asp-for="Confirmacao"></label>
+        <input asp-for="Confirmacao" class="form-control" autocomplete="new-password" />
+        <button class="btn btn-primary mt-3">Salvar nova senha</button>
+        <a asp-action="EsqueciSenha" class="d-block mt-3">Solicitar outro link</a>
+    </form>
+</section>

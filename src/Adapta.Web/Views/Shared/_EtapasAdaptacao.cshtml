@@ -1,0 +1,8 @@
+@model int
+@{ string[] etapas = ["Anexar prova", "Escolher perfil", "Ajustar apoios", "Comparar"]; }
+<ol class="trilha-adaptacao" aria-label="Etapas da adaptação">
+@for (var i = 0; i < etapas.Length; i++) {
+    var numero = i + 1;
+    <li class="@(numero < Model ? "feita" : "")" aria-current="@(numero == Model ? "step" : null)"><span>@numero</span>@etapas[i]</li>
+}
+</ol>

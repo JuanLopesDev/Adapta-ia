@@ -1,0 +1,42 @@
+.folha { max-width: 54rem; overflow-wrap: anywhere; color: #23353b; }
+.texto-folha { white-space: pre-wrap; }
+.questao-folha { margin-top: 1.6rem; border-top: 1px solid #ccd8da; padding-top: 1rem; }
+.questao-folha h3 { font-size: 1.1em; }
+.folha-ampla { font-size: 1.15rem; line-height: 1.8; }
+.folha-ampla .questao-folha { margin-top: 2.4rem; }
+.folha-ampla .opcao-folha { padding: .35em 0; }
+.espaco-folha { min-height: 5rem; border-bottom: 1px solid #698287; color: #44575b; font-size: .9em; }
+.material-folha { margin: .6rem 0; border-left: 3px solid #7e9b94; padding-left: .75rem; }
+.comparativo { max-width:78rem; }
+.cabecalho-comparativo { margin:1.75rem 0 1rem; }
+.cabecalho-comparativo h2 { margin-bottom:.3rem; }
+.nome-prova { margin:0 0 .6rem; font-weight:650; }
+.apoios-aplicados { display:flex; flex-wrap:wrap; gap:.45rem; padding:0; list-style:none; }
+.apoios-aplicados li { padding:.25rem .7rem; border-radius:1rem; background:#e0eee7; color:#24563d; font-size:.85rem; }
+.par-comparado { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); background:white; overflow:hidden; border:1px solid #cbdad8; border-radius:.75rem; margin:0 0 1.2rem; padding:0; }
+.secao-comparada { grid-column:1/-1; color:#183f49; background:#f2f6f6; margin:0; padding:.85rem 1.15rem; font-size:1.08rem; }
+.lado-original,.lado-adaptado { min-width:0; padding:1rem 1.2rem 1.25rem; }
+.lado-original { color:#3c5058; }
+.lado-adaptado { background:#f3f9f5; border-left:1px solid #cbdad8; }
+.rotulo-lado { font-size:.94rem; font-weight:700; margin:0 0 1rem; color:#365760; }
+.rotulo-lado span { font-weight:500; }
+.lado-adaptado .rotulo-lado { color:#26593f; }
+.lado-original .texto-folha { margin-bottom:.4em; }
+@media screen and (max-width:760px) {
+    .par-comparado { grid-template-columns:minmax(0,1fr); }
+    .lado-adaptado { border-left:0; border-top:1px solid #cbdad8; }
+}
+.justificativas dt { color:#244f59; margin-top:.6rem; }
+.justificativas dd { margin:.15rem 0 .6rem; }
+@media print {
+    .comparativo .lado-original,.comparativo .rotulo-lado { display:none; }
+    .comparativo .par-comparado { display:block; border:0; border-radius:0; overflow:visible; }
+    .comparativo .lado-adaptado,.comparativo .secao-comparada { border:0; padding:.2rem 0; background:white; }
+    .comparativo .nome-prova { font-size:1.4rem; }
+    .comparativo .cabecalho-comparativo { margin:0 0 1rem; }
+    .portal .barra, .portal .topo, .ferramentas-folha, .salto, .modal, .offcanvas-backdrop { display: none !important; }
+    .portal, .portal .estrutura, .portal .workspace, .portal .conteudo { display: block; width: auto; min-height: 0; margin: 0; padding: 0; background: white; }
+    .folha { border: 0; padding: 0; box-shadow: none; max-width: none; }
+    .questao-folha h3 { break-after: avoid; }
+    .espaco-folha, .opcao-folha, tr { break-inside: avoid; }
+}

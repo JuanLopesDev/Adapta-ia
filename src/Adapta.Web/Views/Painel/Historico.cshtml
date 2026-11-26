@@ -1,0 +1,11 @@
+@model ListaPortal<Atividade>
+@{ ViewData["Title"] = "Histórico"; }
+<div class="titulo-pagina"><div><h1>Histórico</h1><p>Consulte o cadastro de avaliações, adaptações e as mudanças de estado.</p></div></div>
+<section class="cartao">
+@if (Model.Itens.Count == 0)
+{
+    <partial name="_EstadoVazio" model='new EstadoVazio("History", "Nenhum registro nesta página", "Os eventos das suas avaliações aparecerão aqui, do mais recente para o mais antigo.")' />
+}
+else { <partial name="_Atividades" model="Model.Itens" /> }
+<partial name="_Paginacao" model="Model.Pagina" />
+</section>

@@ -1,0 +1,28 @@
+@model Adapta.Web.ViewModels.LoginViewModel
+@{ ViewData["Title"] = "Acesso docente"; }
+<section class="acesso">
+    <div class="acesso-contexto">
+        <p class="categoria">Adapta · Portal docente</p>
+        <h1>Acesso docente</h1>
+        <p>Entre com a matrícula e a senha fornecidas pela sua instituição.</p>
+    </div>
+    <form class="form-conta" method="post" asp-action="Entrar" asp-route-returnUrl="@Context.Request.Query["ReturnUrl"]">
+        <h2>Entrar na conta</h2>
+        @if (TempData["Mensagem"] is string mensagem) { <p role="status">@mensagem</p> }
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+        <label asp-for="Matricula"></label>
+        <input class="form-control" asp-for="Matricula" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="erro-matricula" />
+        <span id="erro-matricula" asp-validation-for="Matricula"></span>
+        <label asp-for="Senha"></label>
+        <div class="input-group">
+            <input class="form-control" asp-for="Senha" autocomplete="current-password" aria-describedby="erro-senha" />
+            <button type="button" class="btn btn-outline-secondary" id="ver-senha" hidden aria-controls="Senha" aria-pressed="false">Mostrar senha</button>
+        </div>
+        <span id="erro-senha" asp-validation-for="Senha"></span>
+        <button class="btn btn-primary w-100 mt-4" type="submit">Entrar</button>
+        <a class="d-inline-block mt-3" asp-action="EsqueciSenha">Esqueci minha senha</a>
+    </form>
+</section>
+@section Scripts {
+    <script src="~/js/login.js" asp-append-version="true" defer></script>
+}

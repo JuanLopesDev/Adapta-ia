@@ -1,0 +1,20 @@
+@model FolhaAdaptada
+<section class="cartao ficha mt-3 d-print-none" aria-labelledby="titulo-justificativa">
+    <h2 id="titulo-justificativa">Por que a prova foi adaptada assim?</h2>
+    <p>Perfil selecionado: <strong>@PerfisAvaliacao.Nome(Model.Perfil)@if (Model.Perfil == PerfisAvaliacao.Tea && Model.NivelSuporte.HasValue) {<text> · nível de suporte @Model.NivelSuporte</text>}</strong>. Os apoios abaixo correspondem às escolhas do professor para esta prova.</p>
+    <dl class="justificativas">
+        @if (Model.LeituraAmpla) { <dt>Leitura ampliada</dt><dd>A fonte maior e o espaçamento nas alternativas dão mais separação visual às linhas durante a leitura.</dd> }
+        @if (Model.ComandosAlterados > 0) {
+            <dt>Comandos mais diretos</dt>
+            <dd>Trechos ajustados: @Model.ComandosAlterados. A mudança destaca a ação solicitada. O restante do enunciado e as alternativas mantêm a redação revisada pelo professor.
+                <ul>@foreach (var ajuste in Model.AjustesDeComando) {
+                    <li><strong>@ajuste.Local</strong> · “@ajuste.Antes” passou a “@ajuste.Depois”.</li>
+                }</ul>
+            </dd>
+        }
+        @if (Model.GuiaInstrucoes && Model.Conteudo.Instrucoes.Count > 0) { <dt>Marcadores nas instruções</dt><dd>Cada instrução geral recebeu um quadrado para o estudante acompanhar o que já fez e retomar de onde parou.</dd> }
+        @if (Model.EspacoResposta) { <dt>Espaço para responder</dt><dd>Uma área de registro acompanha cada questão para aproximar a resposta do respectivo enunciado.</dd> }
+    </dl>
+    @if (Model.ComandosDiretos && Model.ComandosAlterados == 0) { <p>Você selecionou comandos mais diretos. A revisão foi mantida porque nenhum comando correspondia às substituições disponíveis.</p> }
+    @if (Model.GuiaInstrucoes && Model.Conteudo.Instrucoes.Count == 0) { <p>O documento não tem instruções gerais para receber marcadores.</p> }
+</section>

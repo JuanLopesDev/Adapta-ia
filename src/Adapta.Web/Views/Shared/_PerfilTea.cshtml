@@ -1,0 +1,7 @@
+@model string
+<label class="form-label fw-semibold" for="perfil-adaptacao">Perfil de adaptação</label>
+<select class="form-select" id="perfil-adaptacao" name="perfil" form="revisao" required>
+    <option value="">Selecione um perfil</option>
+    <option value="@PerfisAvaliacao.Tea" selected="@(Model == PerfisAvaliacao.Tea)">Autismo (TEA)</option>
+    <option value="@PerfisAvaliacao.Dislexia" selected="@(Model == PerfisAvaliacao.Dislexia)">Dislexia</option>
+</select>

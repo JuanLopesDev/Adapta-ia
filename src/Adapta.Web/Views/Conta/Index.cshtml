@@ -1,0 +1,15 @@
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService Autorizacao
+@model ContaDocenteDto
+@{ ViewData["Title"] = "Meu perfil"; }
+<div class="titulo-pagina"><div><h1>Meu perfil</h1><p>Consulte seus dados de identificação e gerencie o acesso à conta.</p></div></div>
+@if (TempData["Mensagem"] is string mensagem) { <p class="alert alert-success" role="status">@mensagem</p> }
+<div class="grade-perfil">
+    <section class="cartao ficha"><span class="avatar grande"><icone nome="GraduationCap" /></span><h2>@Model.Nome</h2>
+        <dl><dt>Matrícula institucional</dt><dd>@Model.Matricula</dd></dl>
+    </section>
+    <section class="cartao atalhos"><div class="cab-cartao"><h2>Acesso à conta</h2></div>
+        <a asp-action="AlterarSenha"><span class="simbolo"><icone nome="LockKeyhole" /></span>Alterar senha<icone nome="ArrowRight" /></a>
+        @if ((await Autorizacao.AuthorizeAsync(User, null, Papeis.GerirUsuarios)).Succeeded)
+        { <a asp-controller="GestaoUsuarios" asp-action="Index"><span class="simbolo"><icone nome="ShieldCheck" /></span>Gerenciar usuários<icone nome="ArrowRight" /></a> }
+    </section>
+</div>

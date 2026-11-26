@@ -1,0 +1,5 @@
+@inject Adapta.Web.Services.EmailService Email
+@if (Email.CaixaLocal)
+{
+    <p class="alert alert-info mt-3">Modo de desenvolvimento: a mensagem fica neste computador. Abra <code>%LOCALAPPDATA%\Adapta\Emails</code> no Explorador de Arquivos e consulte o arquivo .eml mais recente.</p>
+}

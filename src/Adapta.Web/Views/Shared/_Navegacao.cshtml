@@ -1,0 +1,26 @@
+@inject IAuthorizationService Autorizacao
+@{
+    var links = new[] {
+        ("Painel", "Index", "LayoutDashboard", "Painel"),
+        ("Painel", "Avaliacoes", "Files", "Minhas avaliações"),
+        ("Painel", "NovaAdaptacao", "WandSparkles", "Nova adaptação"),
+        ("Painel", "Historico", "History", "Histórico"),
+        ("Conta", "Index", "CircleUserRound", "Meu perfil"),
+        ("Home", "Guia", "BookOpen", "Guia do projeto")
+    };
+}
+<nav class="nav-docente" aria-label="Navegação docente">
+    @foreach (var (controller, action, icone, nome) in links)
+    {
+        var ativo = ViewContext.RouteData.Values["controller"]?.ToString() == controller && ViewContext.RouteData.Values["action"]?.ToString() == action;
+        <a asp-controller="@controller" asp-action="@action" aria-current="@(ativo ? "page" : null)" class="@(nome == "Meu perfil" ? "separador" : null)" title="@nome">
+            <icone nome="@icone" /><span>@nome</span>
+        </a>
+    }
+    @if ((await Autorizacao.AuthorizeAsync(User, null, Papeis.GerirUsuarios)).Succeeded) {
+        <a asp-controller="GestaoUsuarios" asp-action="Index" title="Usuários" aria-current="@(ViewContext.RouteData.Values["controller"]?.ToString() == "GestaoUsuarios" ? "page" : null)">
+            <icone nome="ShieldCheck" /><span>Usuários</span>
+        </a>
+    }
+</nav>
+<div class="barra-rodape"><icone nome="GraduationCap" /><span>Portal do professor</span></div>

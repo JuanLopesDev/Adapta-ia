@@ -1,0 +1,14 @@
+@model Adapta.Web.ViewModels.EsqueciSenhaViewModel
+@{ ViewData["Title"] = "Esqueci minha senha"; }
+<section class="conta-pagina">
+    <form asp-action="EsqueciSenha" method="post" class="form-conta">
+        <h1>Recuperar senha</h1>
+        <p>Informe a matrícula para receber um link no e-mail confirmado da sua conta.</p>
+        <p>Se você não cadastrou um e-mail ou perdeu acesso a ele, procure o responsável pelo sistema na sua instituição.</p>
+        <label asp-for="Matricula"></label>
+        <input asp-for="Matricula" class="form-control" autocomplete="username" />
+        <span asp-validation-for="Matricula"></span>
+        <button class="btn btn-primary mt-3">Solicitar link</button>
+        <a asp-action="Entrar" class="d-block mt-3">Voltar ao login</a>
+    </form>
+</section>

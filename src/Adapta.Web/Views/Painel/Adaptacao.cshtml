@@ -1,0 +1,95 @@
+@using Adapta.Web.DTOs.Documentos
+@model ResultadoAdaptacao
+@{ ViewData["Title"] = "Adaptação"; var f = Model.Folha; var dados = f.Conteudo;
+   var blocos = dados.Blocos.Where(b => b.Tipo != "Texto" && !b.VisualDePagina).ToDictionary(b => b.Ordem);
+   var originais = Model.Original.Questoes.ToDictionary(q => q.Id);
+   var blocosOriginais = Model.Original.Blocos.Where(b => !b.VisualDePagina).ToDictionary(b => b.Ordem);
+   var vinculadosOriginais = originais.Values.SelectMany(q => q.Blocos.Concat(q.ElementosVisuais)).ToHashSet();
+   var aberturaOriginal = blocosOriginais.Values.Where(b => !vinculadosOriginais.Contains(b.Ordem)).ToList();
+   var anexados = dados.Questoes.SelectMany(q => q.Blocos.Concat(q.ElementosVisuais)).ToHashSet(); }
+<link rel="stylesheet" href="~/css/folha.css" asp-append-version="true" />
+<section class="ferramentas-folha mb-3">
+    <partial name="_EtapasAdaptacao" model="4" />
+    <a asp-action="NovaAdaptacao">← Nova adaptação e versões salvas</a>
+    <div class="titulo-pagina"><div><h1>Adaptação gerada</h1><p>@(Model.Estado == EstadoAdaptacao.Aprovada ? "Aprovada pelo professor" : "Aguardando revisão docente") · @DataPortal.Mostrar(Model.Data, "dd/MM/yyyy HH:mm")</p></div>
+    @if (Model.Estado == EstadoAdaptacao.Aprovada) {
+        <div class="d-flex gap-2 flex-wrap"><a class="btn btn-primary" asp-action="BaixarPdf" asp-route-id="@Model.Id">Baixar PDF adaptado</a>
+        <button id="imprimir-folha" type="button" class="btn btn-outline-secondary">Imprimir folha</button></div>
+    }</div>
+    <details class="cartao ficha mb-2"><summary>Conferir arquivo original</summary>
+        <a class="d-inline-block my-2" asp-controller="Documentos" asp-action="Original" asp-route-id="@f.DocumentoId">Baixar original (@Model.Formato.ToString().ToUpperInvariant())</a>
+        @if (Model.Formato == FormatoArquivo.Pdf) {
+            <object class="pdf-original" data="@Url.Action("Original", "Documentos", new { id = f.DocumentoId, visualizar = true })" type="application/pdf" aria-label="Diagramação original da prova">Use o link de download para abrir o PDF.</object>
+        }
+    </details>
+    <p class="mt-2">Perfil de adaptação · @PerfisAvaliacao.Nome(f.Perfil) @if (f.Perfil == PerfisAvaliacao.Tea && f.NivelSuporte.HasValue) { <span>· Nível @f.NivelSuporte</span> }</p>
+    <partial name="_MateriaisPdf" model="(f.DocumentoId, dados)" />
+    @if (dados.AvisosComplementares() is { Count: > 0 } avisos) {
+        <details class="aviso-documento"><summary>Conferir antes da aplicação</summary><ul>
+            @foreach (var a in avisos) { <li>@a.Origem · @a.Mensagem</li> }
+        </ul></details>
+    }
+    @if (blocos.Values.Any(b => b.Tipo != "Espaço de resposta" && b.Celulas == null)) {
+        <p class="aviso">Há elementos do original que exigem conferência. Junte as figuras ou materiais indicados à folha antes de aplicá-la.</p>
+    }
+</section>
+<article class="folha comparativo">
+    @if (Model.Estado == EstadoAdaptacao.EmRevisao) { <p class="d-none d-print-block">Rascunho para revisão docente</p> }
+    <header class="cabecalho-comparativo">
+        <h2 class="d-print-none">Antes e depois da adaptação</h2>
+        <p class="nome-prova">@Model.Nome</p>
+        <p class="d-print-none">Compare a extração do arquivo enviado com a folha que o estudante receberá. As correções feitas na revisão aparecem na versão adaptada.</p>
+        <ul class="apoios-aplicados d-print-none" aria-label="Apoios aplicados">
+            @if (f.LeituraAmpla) { <li>Leitura ampliada</li> }
+            @if (f.ComandosAlterados > 0) { <li>Comandos mais diretos</li> }
+            @if (f.GuiaInstrucoes && dados.Instrucoes.Count > 0) { <li>Marcadores de instrução</li> }
+            @if (f.EspacoResposta) { <li>Espaço para respostas</li> }
+        </ul>
+    </header>
+    @if (aberturaOriginal.Count > 0 || dados.Instrucoes.Count > 0 || dados.Apoios.Count > 0 || blocos.Keys.Any(b => !anexados.Contains(b))) {
+        <section class="par-comparado"><h3 class="secao-comparada">Instruções e materiais</h3>
+            <div class="lado-original"><h4 class="rotulo-lado">Antes <span>· Original extraído</span></h4>
+                @if (aberturaOriginal.Count == 0) { <p>Sem instruções ou materiais identificados na abertura.</p> }
+                @foreach (var b in aberturaOriginal) { <partial name="_BlocoComparacao" model="b" /> }
+            </div>
+            <div class="lado-adaptado @(f.LeituraAmpla ? "folha-ampla" : "")"><h4 class="rotulo-lado">Depois <span>· Folha adaptada</span></h4>
+    @foreach (var parte in dados.Instrucoes.Select(i => (i.Bloco, i.Texto, Instrucao:true)).Concat(dados.Apoios.Select(a => (a.Bloco, a.Texto, Instrucao:false))).OrderBy(x => x.Bloco == 0 ? int.MaxValue : x.Bloco)) {
+        <p class="texto-folha">@if (parte.Instrucao && f.GuiaInstrucoes) { <span aria-hidden="true">□ </span> }@parte.Texto</p>
+    }
+    @foreach (var b in blocos.Values.Where(b => !anexados.Contains(b.Ordem))) { <partial name="_ElementoFolha" model="b" /> }
+            </div>
+        </section>
+    }
+    @foreach (var q in dados.Questoes) {
+        <section class="par-comparado questao-folha"><h3 class="secao-comparada">Questão @q.Numero</h3>
+            <div class="lado-original"><h4 class="rotulo-lado">Antes <span>· Original extraído</span></h4>
+                @if (originais.TryGetValue(q.Id, out var original)) {
+                    @foreach (var ordem in original.Blocos.Concat(original.ElementosVisuais).Distinct().Order()) {
+                        if (blocosOriginais.TryGetValue(ordem, out var b)) { <partial name="_BlocoComparacao" model="b" /> }
+                    }
+                } else { <p>Questão incluída pelo professor durante a revisão.</p> }
+            </div>
+            <div class="lado-adaptado @(f.LeituraAmpla ? "folha-ampla" : "")"><h4 class="rotulo-lado">Depois <span>· Folha adaptada</span></h4>
+            @foreach (var a in q.Apoios) { <p class="texto-folha">@a.Texto</p> }
+            <p class="texto-folha">@q.Enunciado</p>
+            @foreach (var ordem in q.Blocos.Concat(q.ElementosVisuais).Distinct().Order()) {
+                if (blocos.TryGetValue(ordem, out var b)) { <partial name="_ElementoFolha" model="b" /> }
+            }
+            @foreach (var alt in q.Alternativas) { <p class="texto-folha opcao-folha"><strong>@alt.Rotulo)</strong> @alt.Texto</p> }
+            @if (f.EspacoResposta) { <div class="espaco-folha">Resposta</div> }
+            </div>
+        </section>
+    }
+</article>
+<partial name="_Justificativa" model="f" />
+@if (Model.Estado == EstadoAdaptacao.EmRevisao) {
+    <section class="ferramentas-folha cartao ficha mt-3"><h2>Revisão do professor</h2>
+        <p>Confira a ordem, a legibilidade, o espaço de resposta e os elementos que devem acompanhar a folha.</p>
+        <div class="d-flex gap-3 flex-wrap align-items-center">
+            <form asp-action="Aprovar" asp-route-id="@Model.Id" method="post"><button class="btn btn-primary">Aprovar esta versão</button></form>
+            <a asp-action="NovaAdaptacao" asp-route-documentoId="@f.DocumentoId">Gerar versão com outros apoios</a>
+            <a asp-controller="Documentos" asp-action="Revisar" asp-route-id="@f.DocumentoId">Rever conteúdo de origem</a>
+        </div>
+    </section>
+}
+@section Scripts { <script type="module" src="~/js/nova-adaptacao.js" asp-append-version="true"></script> }

@@ -1,0 +1,62 @@
+@model NovaAdaptacaoViewModel
+@{ ViewData["Title"] = "Nova adaptação";
+   var doc = Model.Documentos.FirstOrDefault(d => d.Id == Model.DocumentoId);
+   var etapa = doc == null ? 1 : PerfisAvaliacao.Disponivel(Model.Perfil) ? 3 : 2; }
+<div class="titulo-pagina"><div><h1>Nova adaptação</h1></div></div>
+<partial name="_EtapasAdaptacao" model="etapa" />
+<div asp-validation-summary="All" class="text-danger" role="alert"></div>
+@if (etapa == 1) {
+    <section class="cartao ficha mb-3"><h2>Anexar prova</h2>
+        <p>Envie a avaliação original. No próximo passo, escolha o perfil de adaptação.</p><partial name="_UploadDocumento" />
+    </section>
+    @if (Model.Documentos.Count > 0) {
+        <details class="cartao ficha mb-3"><summary>Usar uma avaliação já revisada</summary>
+            <form asp-action="NovaAdaptacao" method="get" class="mt-3">
+                <label for="documentoId">Avaliação revisada</label><select class="form-select mb-3" id="documentoId" name="documentoId" required>
+                    <option value="">Selecione a avaliação</option>
+                    @foreach (var d in Model.Documentos) { <option value="@d.Id">@d.Nome</option> }
+                </select><button class="btn btn-primary">Continuar para o perfil</button>
+            </form>
+        </details>
+    }
+} else if (etapa == 2) {
+    <section class="cartao ficha mb-3"><h2>Escolher perfil</h2><p>@doc!.Nome</p>
+        <form asp-action="NovaAdaptacao" method="get" id="revisao">
+            <input type="hidden" name="documentoId" value="@doc.Id" />
+            <partial name="_PerfilTea" model='string.Empty' />
+            <button class="btn btn-primary mt-3">Continuar para os apoios</button>
+        </form>
+    </section>
+} else {
+    <form asp-action="Gerar" method="post" class="cartao ficha mb-3">
+        <h2>Ajustar os apoios</h2><p>@doc!.Nome · @PerfisAvaliacao.Nome(Model.Perfil!)</p>
+        <input asp-for="DocumentoId" type="hidden" /><input asp-for="Perfil" type="hidden" />
+        <input asp-for="SolicitacaoId" type="hidden" />
+        @if (Model.Perfil == PerfisAvaliacao.Tea) {
+        <label asp-for="NivelSuporte">Nível de suporte TEA (opcional)</label>
+        <select asp-for="NivelSuporte" class="form-select mb-3">
+            <option value="">Não informado</option>
+            @for (int i = 1; i <= 3; i++) { <option value="@i">Nível @i</option> }
+        </select>
+        }
+        <fieldset><legend class="h5">Apoios de apresentação</legend>
+            <p>Escolha de acordo com a tarefa e com os recursos que o estudante costuma usar.</p>
+            <div class="form-check"><input class="form-check-input" asp-for="LeituraAmpla" /><label class="form-check-label" asp-for="LeituraAmpla">Ampliar o texto e o espaçamento entre questões e alternativas</label></div>
+            <div class="form-check"><input class="form-check-input" asp-for="ComandosDiretos" /><label class="form-check-label" asp-for="ComandosDiretos">Usar comandos mais diretos quando houver uma formulação equivalente</label></div>
+            <div class="form-check"><input class="form-check-input" asp-for="GuiaInstrucoes" /><label class="form-check-label" asp-for="GuiaInstrucoes">Incluir marcadores de acompanhamento nas instruções</label></div>
+            <div class="form-check"><input class="form-check-input" asp-for="EspacoResposta" /><label class="form-check-label" asp-for="EspacoResposta">Reservar espaço adicional para registrar respostas</label></div>
+        </fieldset>
+
+        <div class="d-flex align-items-center gap-3 flex-wrap mt-3">
+            <button class="btn btn-primary">Gerar adaptação</button>
+            <a asp-action="NovaAdaptacao" asp-route-documentoId="@doc.Id">Voltar ao perfil</a>
+        </div>
+    </form>
+}
+@if (Model.Versoes.Count > 0) {
+    <section class="cartao ficha"><h2>Adaptações salvas</h2><ul>
+        @foreach (var v in Model.Versoes) { <li><a asp-action="Adaptacao" asp-route-id="@v.Id">@v.Nome</a> · @DataPortal.Mostrar(v.Data, "dd/MM/yyyy HH:mm")</li> }
+    </ul></section>
+}
+
+@section Scripts { @if (etapa == 1) { <script type="module" src="~/js/upload.js" asp-append-version="true"></script> } }
