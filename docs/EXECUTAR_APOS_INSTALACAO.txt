@@ -1,0 +1,56 @@
+ADAPTA — EXECUTAR APÓS A INSTALAÇÃO
+
+1. ABRA O POWERSHELL NA PASTA DO PROJETO
+
+cd "C:\Users\Juan Lopes\Documents\Adapta-ia"
+
+2. SE A PORTA 5236 ESTIVER OCUPADA
+
+Get-NetTCPConnection -LocalPort 5236 | Select-Object OwningProcess
+
+Copie o número exibido em OwningProcess e execute:
+
+Stop-Process -Id NUMERO_DO_PROCESSO -Force
+
+Exemplo:
+
+Stop-Process -Id 12345 -Force
+
+3. CRIAR O ADMINISTRADOR
+
+Faça somente na primeira vez:
+
+$senhaAdministrador = Read-Host "Digite a senha do administrador" -AsSecureString
+try {
+    $env:Seed__SenhaAdministrador = [PSCredential]::new("4805", $senhaAdministrador).GetNetworkCredential().Password
+    dotnet run --project src/Adapta.Web --no-launch-profile -- --seed-admin
+} finally {
+    Remove-Item Env:Seed__SenhaAdministrador -ErrorAction SilentlyContinue
+    $senhaAdministrador.Dispose()
+}
+
+Usuário administrador:
+
+Matrícula: 4805
+Nome: Professor Administrador
+Senha: a senha que você definiu acima
+
+4. ABRIR NO VISUAL STUDIO
+
+Start-Process .\Adapta.sln
+
+No Visual Studio:
+- Confirme que Adapta.Web é o projeto inicial.
+- Selecione o perfil http.
+- Pressione F5.
+
+5. ABRIR NO NAVEGADOR
+
+http://localhost:5236/Conta/Entrar
+
+Entre com a matrícula 4805 e a senha criada no passo 3.
+
+NAS PRÓXIMAS VEZES
+
+Abra Adapta.sln no Visual Studio e pressione F5.
+Não é necessário recriar o banco nem o administrador.
