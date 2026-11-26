@@ -1,0 +1,73 @@
+ADAPTA — COMO BAIXAR E EXECUTAR NO LABORATÓRIO
+
+ANTES DE COMEÇAR
+
+Instale na máquina:
+- Git
+- Visual Studio com a carga de trabalho ASP.NET e desenvolvimento Web
+- SDK .NET 10
+- SQL Server Express LocalDB
+
+1. ABRA O WINDOWS POWERSHELL
+
+2. ENTRE NA PASTA DOCUMENTOS
+
+cd $env:USERPROFILE\Documents
+
+3. BAIXE O REPOSITÓRIO
+
+Depois que a pull request for aceita e estiver na branch main, execute:
+
+git clone --branch main https://github.com/JuanLopesDev/Adapta-ia.git
+
+4. ENTRE NA PASTA DO PROJETO
+
+cd Adapta-ia
+
+Você deve estar em uma pasta parecida com:
+
+C:\Users\SEU_USUARIO\Documents\Adapta-ia
+
+Todos os próximos comandos devem ser executados nessa pasta.
+
+5. BAIXE AS DEPENDÊNCIAS E COMPILE
+
+dotnet restore Adapta.sln
+dotnet tool restore
+dotnet build Adapta.sln
+
+6. CRIE O BANCO DE DADOS
+
+dotnet ef database update --project src/Adapta.Web
+
+7. CRIE O ADMINISTRADOR
+
+$senhaAdministrador = Read-Host "Digite a senha do administrador" -AsSecureString
+try {
+    $env:Seed__SenhaAdministrador = [PSCredential]::new("4805", $senhaAdministrador).GetNetworkCredential().Password
+    dotnet run --project src/Adapta.Web --no-launch-profile -- --seed-admin
+} finally {
+    Remove-Item Env:Seed__SenhaAdministrador -ErrorAction SilentlyContinue
+    $senhaAdministrador.Dispose()
+}
+
+O ADMINISTRADOR SERÁ:
+
+Matrícula: 4805
+Nome: Professor Administrador
+Senha: a senha informada no passo 7
+
+8. ABRA NO VISUAL STUDIO
+
+Start-Process .\Adapta.sln
+
+No Visual Studio, selecione o perfil http e pressione F5.
+
+9. ABRA NO NAVEGADOR
+
+http://localhost:5236/Conta/Entrar
+
+NAS PRÓXIMAS VEZES
+
+Abra Adapta.sln no Visual Studio e pressione F5.
+Não é necessário recriar o banco nem o administrador.
