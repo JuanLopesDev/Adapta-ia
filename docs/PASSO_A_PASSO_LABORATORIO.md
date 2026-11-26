@@ -24,8 +24,16 @@ C:\Users\SEU_USUARIO\Documents
 
 Ainda nessa pasta, digite:
 
+Enquanto a pull request ainda não estiver mesclada, use:
+
 ```powershell
-git clone https://github.com/JuanLopesDev/Adapta-ia.git
+git clone --branch initial-release https://github.com/JuanLopesDev/Adapta-ia.git
+```
+
+Depois que a pull request for mesclada na `main`, use:
+
+```powershell
+git clone --branch main https://github.com/JuanLopesDev/Adapta-ia.git
 ```
 
 Depois entre na pasta do projeto:

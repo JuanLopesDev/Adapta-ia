@@ -16,7 +16,11 @@ cd $env:USERPROFILE\Documents
 
 3. BAIXE O REPOSITÓRIO
 
-Depois que a pull request for aceita e estiver na branch main, execute:
+Enquanto a pull request ainda não estiver aceita, execute:
+
+git clone --branch initial-release https://github.com/JuanLopesDev/Adapta-ia.git
+
+Depois que a pull request for aceita e estiver na branch main, use:
 
 git clone --branch main https://github.com/JuanLopesDev/Adapta-ia.git
 
