@@ -1,0 +1,24 @@
+@model ListaPortal<ItemAvaliacao>
+@{ ViewData["Title"] = "Minhas avaliações"; }
+<div class="titulo-pagina"><div><h1>Minhas avaliações</h1><p>Consulte os documentos e as adaptações das suas avaliações.</p></div>
+<a asp-controller="Documentos" asp-action="Enviar" class="acao-escura"><icone nome="Plus" />Enviar avaliação</a></div>
+@if (TempData["Mensagem"] is string mensagem) { <p role="status" class="alert alert-success">@mensagem</p> }
+<section class="cartao">
+@if (Model.Itens.Count == 0)
+{
+    <partial name="_EstadoVazio" model='new EstadoVazio("Files", "Nenhuma avaliação nesta página", "Suas avaliações cadastradas serão organizadas aqui por data.")' />
+}
+else
+{
+    <ul class="avaliacoes">@foreach (var item in Model.Itens)
+    {
+        <li><span class="simbolo"><icone nome="FileText" /></span><div>
+        @if (item.DocumentoId.HasValue) {
+            <a asp-controller="Documentos" asp-action="Revisar" asp-route-id="@item.DocumentoId">@item.Titulo</a>
+            <small>@item.Formato?.ToString().ToUpperInvariant() · @DocumentoViewModel.Situacao(item.Processamento!.Value, item.Revisao)</small>
+        } else { <strong>@item.Titulo</strong><small>Sem documento</small> }
+        <small>Adaptações: @item.Adaptacoes</small></div><time datetime="@item.Data.ToString("o")">@DataPortal.Mostrar(item.Data)</time></li>
+    }</ul>
+}
+<partial name="_Paginacao" model="Model.Pagina" />
+</section>

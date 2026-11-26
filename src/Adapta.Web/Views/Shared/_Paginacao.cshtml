@@ -1,0 +1,9 @@
+@model Paginacao
+@if (Model.Atual > 1 || Model.TemProxima)
+{
+    <nav class="paginacao" aria-label="Paginação">
+        @if (Model.Atual > 1) { <a asp-route-pagina="@(Model.Atual - 1)">Anterior</a> }
+        <span>Página @Model.Atual</span>
+        @if (Model.TemProxima) { <a asp-route-pagina="@(Model.Atual + 1)">Próxima</a> }
+    </nav>
+}

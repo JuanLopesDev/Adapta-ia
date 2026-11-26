@@ -1,0 +1,184 @@
+/* Estrutura e navegação */
+.portal { --borda:#dce4e2; --texto:#263b40; --muted:#566a6e; --barra:14.25rem; background:#f5f7f6; color:var(--texto); }
+.icone { width:1.2rem; height:1.2rem; flex:none; fill:none; stroke:currentColor; stroke-width:1.65; stroke-linecap:round; stroke-linejoin:round; vertical-align:middle; }
+.estrutura { display:grid; grid-template-columns:var(--barra) minmax(0,1fr); min-height:100vh; }
+.portal .barra { --bs-offcanvas-width:16rem; display:flex; flex-direction:column; background:#fff; color:var(--ink); padding:1.7rem 1rem 1.1rem; }
+.marca-area { display:flex; align-items:center; margin:0 .65rem 2.8rem; }
+.marca-area .marca { color:var(--ink); font-size:1.7rem; letter-spacing:-.055em; }
+.marca-area .marca span { width:2.15rem; height:2.15rem; }
+.nav-docente { display:grid; gap:.35rem; }
+.nav-docente a { display:flex; align-items:center; gap:.8rem; min-height:2.85rem; padding:.62rem .85rem; color:#455b60; font-weight:550; font-size:.93rem; text-decoration:none; border-radius:.55rem; }
+.nav-docente a:hover,.perfil-toggle:hover,.botao-icone:hover { background:#edf3f1; }
+.nav-docente a[aria-current] { background:#e1eee8; color:#195446; box-shadow:inset 3px 0 #438269; font-weight:700; }
+.nav-docente .separador { margin-top:1.8rem; position:relative; }
+.nav-docente .separador::before { content:""; position:absolute; left:.5rem; right:.5rem; top:-.95rem; height:1px; background:var(--borda); }
+.barra-rodape { margin-top:auto; display:flex; align-items:center; gap:.7rem; padding:1rem .8rem 0; font-size:.8rem; color:var(--muted); }
+.workspace { min-width:0; }
+.topo { min-height:4.4rem; background:#fff; border-bottom:1px solid var(--borda); display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.65rem clamp(1rem,3vw,3rem); }
+.trilha,.perfil-toggle,.botao-icone { display:inline-flex; align-items:center; }
+.trilha { gap:.65rem; color:var(--muted); font-size:.85rem; min-width:0; }
+.trilha strong { font-weight:600; color:var(--texto); }
+.trilha i .icone,.perfil-toggle>.icone { width:.9rem; height:.9rem; }
+.botao-icone,.perfil-toggle { background:transparent; color:var(--ink); border:0; border-radius:.6rem; justify-content:center; }
+.botao-icone { width:2.5rem; height:2.5rem; flex:none; }
+.perfil-toggle { gap:.65rem; font-weight:600; font-size:.88rem; padding:.3rem .5rem; }
+.avatar { display:inline-grid; place-items:center; height:2.1rem; width:2.1rem; border-radius:50%; background:#dce9de; color:#315b4c; flex:none; }
+.conteudo { max-width:94rem; padding:clamp(1rem,2.6vw,2.7rem) clamp(1rem,3vw,3rem) 3rem; margin:auto; }
+.salto:focus { position:fixed; z-index:2000; background:white; padding:.6rem; }
+.progresso-pagina { position:fixed; top:0; left:0; width:100%; height:3px; z-index:2000; accent-color:var(--accent); }
+.portal h1,.portal h2,.portal h3,.portal p { overflow-wrap:anywhere; }
+.portal h2 { color:var(--ink); font-size:1.55rem; letter-spacing:-.03em; margin:0; }
+.portal h3 { font:600 1.05rem "Segoe UI",sans-serif; }
+.portal .dropdown-item { padding:.6rem 1rem; }
+.portal .btn:focus-visible,.portal :focus-visible { outline:3px solid #2074a0; outline-offset:3px; }
+
+/* Abertura editorial e ilustração de caderno */
+.boas-vindas { position:relative; isolation:isolate; overflow:hidden; border-radius:1rem; background:#173f43; color:#fff; display:grid; grid-template-columns:minmax(0,1.65fr) minmax(12rem,1fr); align-items:center; min-height:14.2rem; }
+.boas-texto { padding:clamp(1.4rem,2.7vw,2.7rem); z-index:1; }
+.boas-texto .data-hoje { display:flex; align-items:center; gap:.55rem; font-size:.79rem; letter-spacing:.025em; color:#c3dcd6; margin:0 0 .85rem; }
+.data-hoje .icone { width:1rem; height:1rem; }
+.boas-texto h1 { font-size:clamp(2.15rem,3.3vw,3.65rem); line-height:1.05; letter-spacing:-.045em; margin:0 0 .7rem; }
+.boas-texto>p:not(.data-hoje) { max-width:42ch; color:#e1ece9; line-height:1.55; margin:0; }
+.acao-principal,.acao-escura { display:inline-flex; align-items:center; justify-content:center; gap:.55rem; font-weight:650; font-size:.92rem; border-radius:.52rem; padding:.7rem 1rem; text-decoration:none; }
+.acao-principal { margin-top:1.2rem; background:#e0eddb; color:#173f38; }
+.acao-principal:hover { background:white; color:var(--ink); }
+.acao-escura { background:var(--ink); color:white; white-space:nowrap; }
+.acao-escura:hover { background:var(--accent); color:white; }
+.arte-livro { align-self:stretch; position:relative; overflow:hidden; background-image:radial-gradient(#56807d 1px,transparent 1px); background-size:17px 17px; mask-image:linear-gradient(to right,transparent,#000 14%); }
+.orbita { position:absolute; width:19rem; height:19rem; border-radius:50%; background:#28575a; outline:1px solid #60908a; outline-offset:.75rem; right:-2.8rem; top:50%; transform:translateY(-50%); }
+.orbita::after { content:""; position:absolute; inset:1.3rem; border:1px dashed #69918c; border-radius:50%; }
+.caderno { position:absolute; top:50%; left:49%; transform:translate(-50%,-50%) rotate(-12deg) skewY(-3deg); width:11.6rem; height:7.6rem; display:flex; filter:drop-shadow(4px 6px 0 #123c3e); }
+.pagina { position:relative; width:50%; background:#f2f0dd; color:#8b9d8b; border-bottom:5px double #9cad98; }
+.pagina.esquerda { border-radius:5px 27% 2px 6px; transform:skewY(6deg); transform-origin:right; border-right:1px solid #b0bfaa; }
+.pagina.direita { border-radius:20% 5px 6px 2px; background:#dce6d2; transform:skewY(-5deg); transform-origin:left; }
+.pagina i,.pagina b { position:absolute; left:17%; right:17%; }
+.pagina i { top:21%; height:.85rem; background:#a1b7a3; }
+.pagina b { top:43%; height:36%; background:repeating-linear-gradient(0deg,transparent 0 7px,#98ab98 7px 9px); }
+.fita { position:absolute; top:-2%; right:16%; width:.85rem; height:3rem; background:#568274; clip-path:polygon(0 0,100% 0,100% 100%,50% 83%,0 100%); }
+.selo-livro { position:absolute; left:16%; top:65%; width:3rem; height:3rem; display:grid; place-items:center; border-radius:50%; background:#aec9af; color:#224d42; border:3px solid #28575a; }
+.selo-livro .icone { width:1.65rem; height:1.65rem; }
+
+/* Indicadores, listas e estados vazios */
+.bloco { margin:1.8rem 0 1.55rem; }
+.bloco>h2 { margin-bottom:.9rem; }
+.indicadores { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.85rem; }
+.indicador,.cartao,.etapas { background:#fff; border:1px solid var(--borda); border-radius:.8rem; }
+.indicador { display:grid; grid-template-columns:1fr auto; gap:.2rem; align-items:center; padding:1.1rem 1.15rem; }
+.simbolo { display:grid; place-items:center; width:2.25rem; height:2.25rem; flex:none; border-radius:.65rem; background:#e9f0ed; color:#42615b; }
+.indicador .simbolo { grid-column:2; grid-row:1; background:#e0edf4; color:#38617b; }
+.indicador.petroleo .simbolo { background:#e0eeeb; color:#31635b; }
+.indicador.neutro .simbolo { background:#f0eee4; color:#695d3b; }
+.indicador.salvia .simbolo { background:#e5efdf; color:#4a6843; }
+.indicador strong { grid-column:1; grid-row:1; font-size:2.25rem; font-weight:550; line-height:1.1; color:var(--ink); font-variant-numeric:tabular-nums; }
+.legenda { grid-column:1/-1; color:var(--muted); font-size:.89rem; font-weight:550; }
+.grade-painel,.grade-perfil { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(15rem,1fr); gap:1rem; align-items:start; }
+.cab-cartao { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.6rem; padding:1.15rem 1.3rem; border-bottom:1px solid var(--borda); }
+.cab-cartao h2,.ficha h2 { font-size:1.4rem; }
+.cab-cartao a { display:inline-flex; align-items:center; gap:.25rem; font-size:.83rem; font-weight:600; text-decoration:none; }
+.cab-cartao a:hover { text-decoration:underline; }
+.cab-cartao a .icone { width:.9rem; }
+.estado-vazio { display:grid; justify-items:center; text-align:center; padding:1.45rem 1.25rem 1.6rem; }
+.selo-vazio { display:grid; place-items:center; width:3.3rem; height:3.3rem; margin:.1rem 0 .8rem; border-radius:50%; color:#51766a; background:#edf3ed; }
+.selo-vazio .icone { width:1.65rem; height:1.65rem; }
+.estado-vazio h3 { margin:0 0 .35rem; }
+.estado-vazio p,.titulo-pagina p,.corpo-etapa small { color:var(--muted); }
+.estado-vazio p { margin:0; max-width:40ch; font-size:.91rem; }
+.atalhos>a { display:flex; align-items:center; gap:.75rem; color:var(--texto); text-decoration:none; padding:.65rem 1.25rem; font-size:.92rem; font-weight:600; }
+.atalhos>a:first-of-type { margin-top:.3rem; }
+.atalhos>a:last-child { margin-bottom:.3rem; }
+.atalhos>a:hover { background:#f0f6f3; }
+.atalhos>a>.icone { width:1rem; margin-left:auto; color:#58796e; }
+.atividades,.avaliacoes { list-style:none; padding:0; margin:0; }
+.atividades li,.avaliacoes li { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:.8rem; padding:1rem 1.3rem; border-bottom:1px solid var(--borda); }
+.atividades li:last-child,.avaliacoes li:last-child { border-bottom:0; }
+.atividades strong,.avaliacoes strong,.resumo dd { overflow-wrap:anywhere; }
+.atividades small,.avaliacoes small,.atividades time,.avaliacoes time { display:block; color:var(--muted); font-size:.81rem; }
+.paginacao { display:flex; justify-content:center; gap:1.5rem; padding:1rem; }
+
+/* Páginas internas e preparação local */
+.modulo-documento { max-width:48rem; }
+.zona-upload { display:grid; justify-items:center; gap:.65rem; padding:clamp(1rem,4vw,2.5rem); border:1px dashed #7c9d92; border-radius:.8rem; background:#f3f7f4; text-align:center; }
+.zona-upload { grid-template-columns:auto minmax(0,1fr) auto; justify-items:start; align-items:center; text-align:left; }
+.zona-upload input:focus-visible + label { outline:3px solid #196879; outline-offset:3px; }
+.arquivo-selecionado { overflow-wrap:anywhere; font-weight:600; }
+@media(max-width:650px) {
+    .zona-upload { grid-template-columns:auto minmax(0,1fr); }
+    .zona-upload .escolher-arquivo { grid-column:1/-1; justify-self:stretch; }
+}
+.zona-upload label { font-weight:650; }
+.zona-upload.arrastando { background:#d9ece2; outline:2px solid var(--accent); }
+.pdf-original { width:100%; height:min(65vh,44rem); }
+.aviso-documento { background:#e5eff3; padding:1rem; border-radius:.7rem; margin:1rem 0; }
+.aviso-documento ul { margin:.6rem 0 0; }
+.bloco-extraido { margin:.75rem 0; border-bottom:1px solid var(--borda); }
+.bloco-extraido p,.bloco-extraido td { white-space:pre-wrap; overflow-wrap:anywhere; }
+.questao { margin:.8rem 0 1.3rem; min-width:0; }
+.questao legend { float:none; width:auto; padding:0 .4rem; font:1.35rem Georgia,serif; }
+#revisao label { display:block; margin:.65rem 0; }
+.alternativa { display:grid; gap:.8rem; grid-template-columns:minmax(4rem,6rem) minmax(0,1fr); }
+.alternativa>button { grid-column:2; justify-self:start; font-size:.8rem; }
+.acoes-revisao { display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; margin-top:.7rem; }
+#processando[hidden] { display:none; }
+.titulo-pagina { display:flex; justify-content:space-between; align-items:center; gap:1.2rem; margin:.5rem 0 1.6rem; }
+.titulo-pagina h1 { font-size:clamp(2.35rem,4vw,3.5rem); margin:0 0 .55rem; }
+.titulo-pagina p { margin:0; }
+.aviso { display:flex; align-items:flex-start; gap:.75rem; background:#e5eff3; color:#284d60; padding:1rem 1.15rem; border-radius:.7rem; max-width:58rem; }
+.trilha-adaptacao { display:flex; flex-wrap:wrap; list-style:none; padding:0; margin:1rem 0 1.5rem; gap:.65rem 1.5rem; }
+.trilha-adaptacao li { display:flex; align-items:center; gap:.45rem; color:#526870; font-size:.9rem; }
+.trilha-adaptacao li span { display:grid; place-items:center; width:1.65rem; height:1.65rem; border:1px solid #a0b2b7; border-radius:50%; font-variant-numeric:tabular-nums; }
+.trilha-adaptacao li[aria-current] { color:#144d5c; font-weight:700; }
+.trilha-adaptacao li[aria-current] span { background:#145663; color:white; border-color:#145663; }
+.trilha-adaptacao li.feita span { background:#e3eee6; color:#315740; border-color:#adc6b5; }
+@media(max-width:650px) { .trilha-adaptacao { display:grid; grid-template-columns:1fr 1fr; gap:.6rem; } }
+.etapas { max-width:58rem; }
+.etapas details+details { border-top:1px solid var(--borda); }
+.etapas summary { list-style:none; display:flex; align-items:center; gap:.85rem; padding:1.05rem; font-weight:650; cursor:pointer; }
+.etapas summary::-webkit-details-marker { display:none; }
+.etapas summary span { display:grid; place-items:center; border-radius:50%; background:#e6eeea; color:#31564a; width:2rem; height:2rem; flex:none; }
+.etapas summary .icone { width:1rem; margin-left:auto; }
+.etapas details[open] summary .icone { transform:rotate(180deg); }
+.corpo-etapa { padding:0 1.3rem 1rem 3.9rem; }
+.corpo-etapa label,.ficha dt,.resumo dt { display:block; font-weight:600; margin-bottom:.3rem; }
+.corpo-etapa small { display:block; margin:.4rem 0; }
+.corpo-etapa p:empty { display:none; }
+.resumo dd { white-space:pre-wrap; }
+.ficha { padding:1.6rem; }
+.ficha h2 { margin:.85rem 0 1.25rem; }
+.ficha dl { margin-bottom:0; }
+.ficha dt,.resumo dt { font-size:.84rem; color:var(--muted); }
+.grande { width:3.25rem; height:3.25rem; }
+.grande .icone { width:1.8rem; height:1.8rem; }
+
+@media(min-width:992px) {
+    .portal .barra { position:sticky; top:0; height:100dvh; overflow-y:auto; border-right:1px solid var(--borda); background:#fff !important; }
+    .compacto { --barra:4.8rem; }
+    .compacto .barra { padding-inline:.6rem; }
+    .compacto .marca-area { margin-inline:auto; }
+    .compacto .nav-docente a,.compacto .barra-rodape { justify-content:center; }
+    .compacto .barra b,.compacto .barra-rodape span { display:none; }
+    .compacto .nav-docente a span { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+    .compacto #recolher .icone { transform:rotate(180deg); }
+}
+@media(max-width:991.98px) {
+    .estrutura { grid-template-columns:minmax(0,1fr); }
+    .portal .barra { padding-top:1.2rem; }
+    .boas-vindas { grid-template-columns:minmax(0,1.8fr) minmax(9rem,1fr); }
+}
+@media(max-width:760px) {
+    .grade-painel,.grade-perfil { grid-template-columns:minmax(0,1fr); }
+    .indicadores { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .trilha .trilha-raiz,.nome-topo { display:none; }
+    .boas-texto h1 { font-size:2.45rem; }
+}
+@media(max-width:575px) {
+    .boas-vindas { display:block; }
+    .arte-livro { display:none; }
+    .boas-texto { padding:1.4rem; }
+    .titulo-pagina { align-items:flex-start; flex-direction:column; }
+    .indicador { padding:.85rem; }
+    .legenda { font-size:.83rem; }
+    .corpo-etapa { padding-left:1rem; }
+    .atividades li,.avaliacoes li { grid-template-columns:auto minmax(0,1fr); }
+    .atividades time,.avaliacoes time { grid-column:2; }
+    .cab-cartao { padding:1rem; }
+}

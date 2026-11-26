@@ -1,0 +1,13 @@
+@model CriarUsuarioViewModel
+@{ ViewData["Title"] = "Criar usuário"; }
+<a asp-action="Index">← Usuários</a>
+<div class="titulo-pagina"><div><h1>Criar usuário</h1><p>A nova conta terá acesso como professor.</p></div></div>
+<form asp-action="Criar" method="post" class="cartao ficha form-conta">
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+    <label asp-for="Nome">Nome do professor</label><input class="form-control" asp-for="Nome" required maxlength="150" />
+    <label asp-for="Matricula">Matrícula</label><input class="form-control" asp-for="Matricula" required maxlength="64" autocomplete="off" />
+    <label asp-for="Nova">Senha inicial</label><input class="form-control" asp-for="Nova" required autocomplete="new-password" aria-describedby="requisitos" />
+    <small id="requisitos">@NovaSenhaViewModel.Requisitos</small>
+    <label asp-for="Confirmacao">Confirmar senha inicial</label><input class="form-control" asp-for="Confirmacao" required autocomplete="new-password" />
+    <button class="btn btn-primary mt-3">Criar usuário</button>
+</form>

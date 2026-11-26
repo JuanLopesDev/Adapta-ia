@@ -1,0 +1,20 @@
+@model Adapta.Web.DTOs.Documentos.ExtractedQuestion
+<fieldset class="questao ficha cartao" data-id="@(Model.Id == Guid.Empty ? "" : Model.Id.ToString())">
+    <legend>Questão <span class="posicao">@Model.Ordem</span></legend>
+    <small>@Model.Tipo · @Model.Confianca</small>
+    <label>Numeração original<input class="form-control numero" value="@Model.Numero" maxlength="100" /></label>
+    <label>Enunciado<textarea class="form-control enunciado" rows="3">@Model.Enunciado</textarea></label>
+    @foreach (var apoio in Model.Apoios) { <p><strong>Texto de apoio</strong><br />@apoio.Texto</p> }
+    <div class="alternativas">
+        @foreach (var alt in Model.Alternativas)
+        {
+            <div class="alternativa"><label>Rótulo<input class="form-control rotulo" value="@alt.Rotulo" /></label>
+                <label>Alternativa<textarea class="form-control texto-alt" rows="2">@alt.Texto</textarea></label><button type="button" class="btn btn-light" data-acao="remover-alternativa">Remover alternativa</button></div>
+        }
+    </div>
+    <div class="acoes-revisao">
+        <button type="button" data-acao="alternativa" class="btn btn-light">Adicionar alternativa</button>
+        <button type="button" data-acao="subir" class="btn btn-light">Mover acima</button>
+        <button type="button" data-acao="descer" class="btn btn-light">Mover abaixo</button>
+    </div>
+</fieldset>

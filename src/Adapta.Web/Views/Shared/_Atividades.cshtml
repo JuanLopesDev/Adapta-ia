@@ -1,0 +1,10 @@
+@model IReadOnlyList<Atividade>
+<ul class="atividades">
+@foreach (var item in Model)
+{
+    <li><span class="simbolo"><icone nome="@(item.Tipo == TipoAtividade.Avaliacao ? "FileText" : "Layers")" /></span>
+        <div><strong>@item.Titulo</strong><small>@item.Descricao</small></div>
+        <time datetime="@item.Data.ToString("o")">@DataPortal.Mostrar(item.Data, "dd MMM yyyy · HH:mm")</time>
+    </li>
+}
+</ul>

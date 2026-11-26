@@ -1,0 +1,8 @@
+@using Adapta.Web.DTOs.Documentos
+@model BlocoOriginal
+@if (Model.Celulas is { } linhas) {
+    <div class="table-responsive"><table class="table table-bordered"><caption>@Model.Origem · Tabela</caption><tbody>
+    @foreach (var linha in linhas) { <tr>@foreach (var celula in linha) { <td>@celula</td> }</tr> }
+    </tbody></table></div>
+} else if (Model.Tipo == "Espaço de resposta") { <p class="texto-folha">@Model.Texto</p> }
+else { <aside class="material-folha"><strong>@Model.Tipo · @Model.Origem</strong><p class="texto-folha">@Model.Texto</p>Consulte este elemento no original.</aside> }

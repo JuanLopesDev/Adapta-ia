@@ -1,0 +1,16 @@
+@using Adapta.Web.DTOs.Documentos
+@model (Guid Documento, ExtractedAssessment Conteudo)
+@{ var paginas = Model.Conteudo.Blocos.Where(b => b.VisualDePagina).Select(b => b.Origem).Distinct().ToList(); }
+@if (paginas.Count > 0) {
+    <aside class="aviso-documento d-print-none">
+        <strong>Material visual no PDF original</strong>
+        <p>Abra as páginas abaixo para conferir figuras, tabelas e gráficos. Se a resposta depender de algum deles, entregue esse material junto com a folha adaptada. O PDF gerado contém a parte textual da avaliação.</p>
+        <div class="d-flex flex-wrap gap-3">
+        @foreach (var pagina in paginas) {
+            var numero = pagina.Split(' ').Last();
+            var original = Url.Action("Original", "Documentos", new { id = Model.Documento, visualizar = true });
+            <a href="@(original + "#page=" + numero)" target="_blank" rel="noopener">@pagina</a>
+        }
+        </div>
+    </aside>
+}

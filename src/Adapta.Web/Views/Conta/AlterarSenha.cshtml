@@ -1,0 +1,20 @@
+@model Adapta.Web.ViewModels.AlterarSenhaViewModel
+@{ ViewData["Title"] = "Alterar senha"; }
+<section class="conta-pagina">
+    <a asp-action="Index">← Minha conta</a>
+    <form asp-action="AlterarSenha" method="post" class="form-conta mt-3">
+        <h1>Alterar senha</h1>
+        <p id="requisitos">@Adapta.Web.ViewModels.NovaSenhaViewModel.Requisitos</p>
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+        <label asp-for="Atual"></label>
+        <input class="form-control" asp-for="Atual" autocomplete="current-password" />
+        <span asp-validation-for="Atual"></span>
+        <label asp-for="Nova"></label>
+        <input class="form-control" asp-for="Nova" autocomplete="new-password" aria-describedby="requisitos" />
+        <span asp-validation-for="Nova"></span>
+        <label asp-for="Confirmacao"></label>
+        <input class="form-control" asp-for="Confirmacao" autocomplete="new-password" />
+        <span asp-validation-for="Confirmacao"></span>
+        <button type="submit" class="btn btn-primary mt-4">Salvar nova senha</button>
+    </form>
+</section>

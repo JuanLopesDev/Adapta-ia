@@ -1,0 +1,15 @@
+<form id="upload" asp-controller="Documentos" asp-action="Enviar" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="adaptar" value="true" />
+    <div asp-validation-summary="All" role="alert" class="text-danger"></div>
+    <div id="soltar" class="zona-upload">
+        <span class="simbolo"><icone nome="CloudUpload" /></span>
+        <div><strong>Arraste a prova para esta área</strong><small class="d-block" id="formatos-arquivo">PDF ou DOCX · até 10 MiB</small></div>
+        <input id="arquivo" name="arquivo" type="file" class="visually-hidden" accept=".pdf,.docx" aria-describedby="formatos-arquivo" required />
+        <label for="arquivo" class="btn btn-outline-primary escolher-arquivo">Selecionar arquivo</label>
+    </div>
+    <p id="erro-arquivo" role="alert" class="text-danger"></p>
+    <p id="selecao" role="status" class="arquivo-selecionado"></p>
+    <button type="button" id="remover" class="btn btn-light" hidden>Remover arquivo</button>
+    <button type="submit" class="btn btn-primary">Confirmar envio</button>
+    <div id="processando" class="aviso mt-3" role="status" hidden><span class="spinner-border spinner-border-sm"></span> Enviando e processando o original…</div>
+</form>

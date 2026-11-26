@@ -1,0 +1,5 @@
+@{ ViewData["Title"] = "Enviar avaliação"; }
+<a asp-controller="Painel" asp-action="Avaliacoes">← Minhas avaliações</a>
+<div class="titulo-pagina"><div><h1>Enviar avaliação</h1><p>Anexe o arquivo original. Você poderá conferir e corrigir a extração antes de confirmá-la.</p></div></div>
+<section class="cartao ficha modulo-documento"><partial name="_UploadDocumento" /></section>
+@section Scripts { <script type="module" src="~/js/upload.js" asp-append-version="true"></script> }

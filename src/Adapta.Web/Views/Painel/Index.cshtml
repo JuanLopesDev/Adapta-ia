@@ -1,0 +1,32 @@
+@model PainelViewModel
+@{ ViewData["Title"] = "Painel"; var docente = (ContaDocenteDto)ViewData["Docente"]!; }
+<section class="boas-vindas">
+    <div class="boas-texto">
+        <p class="data-hoje"><icone nome="CalendarDays" /> @DataPortal.Mostrar(DateTimeOffset.UtcNow, "dddd, dd 'de' MMMM 'de' yyyy")</p>
+        <h1>Olá, @docente.Nome.</h1>
+        <p>Acompanhe suas avaliações e organize as adaptações para seus estudantes.</p>
+        <a class="acao-principal" asp-action="NovaAdaptacao"><icone nome="Plus" /> Nova adaptação</a>
+    </div>
+    <div class="arte-livro" aria-hidden="true">
+        <div class="orbita"></div><div class="caderno"><div class="pagina esquerda"><i></i><b></b></div><div class="pagina direita"><i></i><b></b></div><span class="fita"></span></div>
+        <div class="selo-livro"><icone nome="Sprout" /></div>
+    </div>
+</section>
+<section class="bloco">
+    <h2>Visão geral</h2>
+    <div class="indicadores">@foreach (var indicador in Model.Indicadores) { <partial name="_Indicador" model="indicador" /> }</div>
+</section>
+<div class="grade-painel">
+    <section class="cartao"><div class="cab-cartao"><h2>Atividades recentes</h2><a asp-action="Historico">Ver histórico <icone nome="ArrowUpRight" /></a></div>
+        @if (Model.Recentes.Count == 0)
+        {
+            <partial name="_EstadoVazio" model='new EstadoVazio("FolderOpen", "Nenhuma atividade por aqui", "As avaliações e adaptações que você cadastrar aparecerão aqui.")' />
+        }
+        else { <partial name="_Atividades" model="Model.Recentes" /> }
+    </section>
+    <section class="cartao atalhos"><div class="cab-cartao"><h2>Ações rápidas</h2></div>
+        <a asp-controller="Documentos" asp-action="Enviar"><span class="simbolo"><icone nome="NotebookPen" /></span>Nova avaliação<icone nome="ArrowRight" /></a>
+        <a asp-action="Avaliacoes"><span class="simbolo"><icone nome="Files" /></span>Consultar avaliações<icone nome="ArrowRight" /></a>
+        <a asp-action="Historico"><span class="simbolo"><icone nome="History" /></span>Consultar histórico<icone nome="ArrowRight" /></a>
+    </section>
+</div>

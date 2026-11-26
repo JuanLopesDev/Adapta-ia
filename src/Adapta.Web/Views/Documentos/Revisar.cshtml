@@ -1,0 +1,74 @@
+@using Adapta.Web.DTOs.Documentos
+@model DocumentoViewModel
+@{ ViewData["Title"] = "Revisão da extração"; var doc = Model.Documento; }
+<a asp-controller="Painel" asp-action="Avaliacoes">← Minhas avaliações</a>
+@if (Model.Adaptar) { <partial name="_EtapasAdaptacao" model="2" /> }
+<div class="titulo-pagina"><div><h1>@doc.Avaliacao.Titulo</h1>
+<p>@DocumentoViewModel.Situacao(doc.Processamento, doc.Revisao) · @doc.Tamanho.ToString("N0") bytes · @DataPortal.Mostrar(doc.Avaliacao.CriadaEm)</p>
+@if (doc.RevisadoEm.HasValue) { <small>Última revisão: @DataPortal.Mostrar(doc.RevisadoEm.Value, "dd/MM/yyyy HH:mm")</small> }</div></div>
+@if (TempData["Mensagem"] is string sucesso) { <p class="alert alert-success" role="status">@sucesso</p> }
+@if (TempData["Erro"] is string erro) { <p class="alert alert-danger" role="alert">@erro</p> }
+@if (doc.Revisao == EstadoRevisao.Revisado && !doc.ExclusaoSolicitada) {
+    <a class="btn btn-primary mb-3" asp-controller="Painel" asp-action="NovaAdaptacao" asp-route-documentoId="@doc.Id">Adaptar esta avaliação</a>
+}
+@if (Model.Adaptar && Model.Conteudo != null) {
+    <section class="cartao ficha mb-3"><h2>Escolher perfil</h2>
+        <partial name="_PerfilTea" model='Model.Perfil ?? string.Empty' />
+        <p class="mt-2 mb-0">Confira abaixo as questões extraídas e confirme para escolher os apoios.</p>
+    </section>
+} else if (!Model.Adaptar && Model.Conteudo != null && doc.Revisao != EstadoRevisao.Revisado) {
+    <a class="btn btn-outline-primary mb-3" asp-action="Revisar" asp-route-id="@doc.Id" asp-route-adaptar="true">Escolher perfil de adaptação</a>
+}
+@if (!doc.ExclusaoSolicitada)
+{
+    <section class="cartao ficha mb-3"><h2>Documento original</h2>
+        <a asp-action="Original" asp-route-id="@doc.Id">Baixar @doc.Formato.ToString().ToUpperInvariant() original</a>
+        @if (doc.Formato == FormatoArquivo.Pdf)
+        {
+            <details class="mt-2"><summary>Visualizar PDF</summary>
+            <object class="pdf-original" data="@Url.Action("Original", new { id = doc.Id, visualizar = true })" type="application/pdf" aria-label="Avaliação original">Abra o arquivo pelo link de download.</object></details>
+        }
+        else { <p class="mb-0">Abra o DOCX no Word para conferir a diagramação. Os blocos de conteúdo estão disponíveis abaixo.</p> }
+    </section>
+}
+@if (Model.Conteudo is { } dados)
+{
+    @if (dados.AvisosComplementares() is { Count: > 0 } avisos) {
+        <details class="aviso-documento" open><summary>Avisos de extração (@avisos.Count)</summary>
+        <ul>@foreach (var aviso in avisos) { <li><strong>@aviso.Origem</strong> · @aviso.Mensagem</li> }</ul></details>
+    }
+    <partial name="_MateriaisPdf" model="(doc.Id, dados)" />
+    <details class="cartao ficha mb-3"><summary>Conteúdo extraído em ordem original</summary>
+        @foreach (var bloco in dados.Blocos.Where(b => !b.VisualDePagina)) {
+            <div class="bloco-extraido"><small>#@bloco.Ordem · @bloco.Origem · @bloco.Tipo</small>
+            @if (bloco.Celulas != null) { <div class="table-responsive"><table class="table"><tbody>@foreach (var linha in bloco.Celulas) { <tr>@foreach (var celula in linha) { <td>@celula</td> }</tr> }</tbody></table></div> }
+            else { <p>@bloco.Texto</p> }
+            </div>
+        }
+    </details>
+    <form id="revisao" asp-action="Salvar" asp-route-id="@doc.Id" method="post">
+        <input type="hidden" name="adaptar" value="@(Model.Adaptar ? "true" : "false")" />
+        <input type="hidden" name="versao" value="@Convert.ToBase64String(doc.Versao)" /><input type="hidden" name="edicao" />
+        <section class="cartao ficha mb-3"><h2>Instruções</h2><div id="instrucoes">
+            @foreach (var i in dados.Instrucoes) { <label>Instrução<textarea class="form-control">@i.Texto</textarea></label> }
+        </div><button id="add-instrucao" type="button" class="btn btn-light mt-2">Adicionar instrução</button>
+        @if (dados.Apoios.Count > 0) { <h3 class="mt-3">Textos de apoio e preâmbulo</h3>@foreach (var a in dados.Apoios) { <p>@a.Texto</p> } }</section>
+        <h2 class="mb-2">Questões identificadas</h2>
+        <div id="questoes">@foreach (var q in dados.Questoes) { <partial name="_Questao" model="q" /> }</div>
+        <template id="modelo-questao"><partial name="_Questao" model='new ExtractedQuestion { Id = Guid.Empty }' /></template>
+        <button id="add-questao" type="button" class="btn btn-light mb-3">Adicionar questão</button>
+        <noscript><p>Ative o JavaScript para editar e enviar a revisão.</p></noscript>
+        <div class="acoes-revisao"><button class="btn btn-outline-secondary" name="confirmar" value="false" formnovalidate>Salvar revisão</button>
+        <button class="btn btn-primary" name="confirmar" value="true">@(Model.Adaptar ? "Confirmar e continuar para os apoios" : "Confirmar extração")</button>
+        <a asp-action="Estrutura" asp-route-id="@doc.Id">Baixar JSON salvo</a></div>
+    </form>
+}
+else if (!doc.ExclusaoSolicitada)
+{
+    <p class="aviso">A extração ainda não está disponível. Você pode recuperar o original ou tentar processá-lo novamente.</p>
+    <form asp-action="Reprocessar" asp-route-id="@doc.Id" asp-route-adaptar="@Model.Adaptar" method="post"><button class="btn btn-primary">Processar novamente</button></form>
+}
+<form asp-action="Excluir" asp-route-id="@doc.Id" method="post" class="mt-4" id="excluir">
+    <details><summary>Excluir documento</summary><p>Esta ação remove o original e a revisão.</p><button class="btn btn-outline-danger">Confirmar exclusão</button></details>
+</form>
+@section Scripts { <script type="module" src="~/js/revisao.js" asp-append-version="true"></script> }

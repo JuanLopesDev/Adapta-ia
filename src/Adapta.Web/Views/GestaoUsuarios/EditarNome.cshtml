@@ -1,0 +1,10 @@
+@model EditarNomeViewModel
+@{ ViewData["Title"] = "Editar nome"; var matricula = (string)ViewData["Matricula"]!; }
+<a asp-action="Index">← Usuários</a>
+<div class="titulo-pagina"><div><h1>Editar nome</h1><p>Matrícula @matricula</p></div></div>
+<form asp-action="EditarNome" asp-route-matricula="@matricula" method="post" class="cartao ficha form-conta">
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+    <input asp-for="Versao" type="hidden" />
+    <label asp-for="Nome">Nome do professor</label><input class="form-control" asp-for="Nome" required maxlength="150" />
+    <button class="btn btn-primary mt-3">Salvar nome</button>
+</form>
